@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <LinearLayout
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:text=""
+                        android:layout_alignParentStart="true"
+                        android:gravity="center|left"
+                        android:textColor="@android:color/white"
+                        android:layout_width="wrap_content"
+                        android:visibility="visible"
+                        android:layout_height="match_parent" />
+
+
+                    <TextView
+                        android:id="@+id/txt"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:text="Hi,"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@+id/txtusername"
+                        android:gravity="center|left"
+                        android:textColor="@android:color/white"
+                        android:layout_width="wrap_content"
+                        android:visibility="visible"
+                        android:layout_height="match_parent" />
+
+
+                    <TextView
+                        android:id="@+id/txtusername"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:text="Aditya"
+                        android:layout_marginEnd="@dimen/headingtxt20"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="center|left"
+                        android:textColor="@android:color/white"
+                        android:layout_width="wrap_content"
+                        android:visibility="visible"
+                        android:layout_height="match_parent" />
+
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+
+</RelativeLayout>

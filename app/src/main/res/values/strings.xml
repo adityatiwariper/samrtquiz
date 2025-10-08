@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">smart quiz</string>
+    <dimen name="headingtxt20">20dp</dimen>
+</resources>
