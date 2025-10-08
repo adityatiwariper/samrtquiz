@@ -20,6 +20,7 @@ import com.example.smartquiz.model.Question;
 import com.example.smartquiz.model.Result;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -196,6 +197,10 @@ public class QuizActivity extends AppCompatActivity {
     // --- QUESTION LOADING ---
     private void loadQuestion() {
         Question q = questionList.get(currentIndex);
+
+        // Shuffle options
+        List<String> opts = Arrays.asList(q.getOption1(), q.getOption2(), q.getOption3(), q.getOption4());
+        Collections.shuffle(opts);
         txtQuestion.setText(q.getQuestion());
         ((RadioButton) findViewById(R.id.opt1)).setText(q.getOption1());
         ((RadioButton) findViewById(R.id.opt2)).setText(q.getOption2());
