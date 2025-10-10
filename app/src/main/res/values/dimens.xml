@@ -1,0 +1,57 @@
+<resources>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">120dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_top">8dp</dimen>
+    <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="marginCard">3dp</dimen>
+    <dimen name="pageMargin">8dp</dimen>
+    <dimen name="closeheight">35dp</dimen>
+    <dimen name="headerText">14sp</dimen>
+    <dimen name="textSize">15sp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_5sp">5sp</dimen>
+    <dimen name="margin_7">7dp</dimen>
+    <dimen name="pageHeaderText">18dp</dimen>
+    <dimen name="cardHeaderText">20dp</dimen>
+    <dimen name="iconsize">55dp</dimen>
+    <dimen name="mediumText">13sp</dimen>
+    <dimen name="locationText">12sp</dimen>
+    <dimen name="sliderHeight">160dp</dimen>
+    <dimen name="sliderHeight2">190dp</dimen>
+    <dimen name="sliderHeight3">200dp</dimen>
+    <dimen name="h1Size">21sp</dimen>
+    <dimen name="margin">0dp</dimen>
+    <dimen name="margin_3">3dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="classesHeight">220dp</dimen>
+    <dimen name="height250">250dp</dimen>
+    <dimen name="packageImageHeight">220dp</dimen>
+    <dimen name="titleSize">20dp</dimen>
+    <dimen name="buttonText">13dp</dimen>
+    <dimen name="screenPedding">10dp</dimen>
+    <dimen name="smallText">10dp</dimen>
+    <dimen name="normalText">15sp</dimen>
+    <dimen name="largeText">17sp</dimen>
+    <dimen name="margin_1">1dp</dimen>
+    <dimen name="workoutHeight">130dp</dimen>
+    <dimen name="adSize">70dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
+    <dimen name="dots_height">30dp</dimen>
+    <dimen name="dots_margin_bottom">20dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_4dp">4dp</dimen>
+    <dimen name="dimen_8dp">8dp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
+    <dimen name="dimen_24sp">24sp</dimen>
+    <dimen name="dimen_150dp">150dp</dimen>
+    <dimen name="dimen_15sp">15sp</dimen>
+    <dimen name="dimen_11sp">11sp</dimen>
+    <dimen name="dimen_100dp">100dp</dimen>
+
+
+</resources>

@@ -8,4 +8,54 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#206ADA</color>
+
+
+    <color name="primary_dark">#21005D</color>
+
+
+    <color name="surface">#FFFBFE</color>
+    <color name="surface_variant">#E7E0EC</color>
+    <color name="primary_text">#1C1B1F</color>
+    <color name="secondary_text">#49454F</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="foreground">#0A0A0A</color>
+    <color name="card">#FFFFFF</color>
+    <color name="card_foreground">#0A0A0A</color>
+    <color name="popover">#FFFFFF</color>
+    <color name="popover_foreground">#0A0A0A</color>
+    <color name="primary">#16A34A</color>
+    <color name="primary_foreground">#F0FDF4</color>
+    <color name="secondary">#F4F4F5</color>
+    <color name="secondary_foreground">#18181B</color>
+    <color name="muted">#F4F4F5</color>
+    <color name="muted_foreground">#71717A</color>
+    <color name="accent">#F4F4F5</color>
+    <color name="accent_foreground">#18181B</color>
+    <color name="destructive_foreground">#F0FDF4</color>
+    <color name="success">#16A34A</color>
+    <color name="border">#E4E4E7</color>
+    <color name="input">#E4E4E7</color>
+    <color name="ring">#16A34A</color>
+
+    <!-- Chart Colors -->
+    <color name="chart_green_1">#2ecc71</color>
+    <color name="chart_green_2">#27ae60</color>
+    <color name="chart_green_3">#16a085</color>
+    <color name="chart_green_4">#1abc9c</color>
+    <color name="chart_blue">#3498db</color>
+
+    <color name="completed_text">#2ecc71</color>
+    <color name="in_progress_text">#2196F3</color>
+    <color name="not_started_text">#9E9E9E</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <color name="destructive">#DC362E</color>
+    <color name="on_destructive">#FFFFFF</color>
+    <color name="destructive_light">#FBEFEF</color>
+
+    <color name="info">#0288D1</color>
+    <color name="warning">#ED6C02</color>
+
 </resources>

@@ -4,7 +4,10 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -12,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
 import com.example.smartquiz.R;
@@ -26,122 +30,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class QuizActivity extends AppCompatActivity {
 
-    List<Question> questionList;
-    int currentIndex = 0;
-    int correct = 0, wrong = 0;
+    // Views
+    private TextView subjectName, quizSetTitle, timerText, questionProgress, progressPercent, questionText;
+    private ProgressBar progressBar;
+    private RadioGroup optionsRadioGroup;
+    private AppCompatButton previousButton, skipButton, nextButton;
 
-    CountDownTimer timer;
-    TextView txtQuestion, txtTimer, txtProgress;
-    RadioGroup optionsGroup;
-    Button btnNext, btnPrev, btnSubmit;
-    DBHelper db;
-    ProgressBar progressBar;
-    CardView cardQuestion;
-
-    long timeLeftMillis;
-    long selectedDuration = 5 * 60 * 1000; // default 5 mins
-    HashMap<Integer, Integer> selectedAnswers = new HashMap<>();
+    // Quiz data
+    private String subjectId, setId;
+    private Question[] questions;
+    private int currentQuestion = 0;
+    private Map<Integer, Integer> answers = new HashMap<>();
+    private CountDownTimer countDownTimer;
+    private long timeLeftMillis = 60 * 60 * 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        db = new DBHelper(this);
-        questionList = db.getAllQuestions();
 
-        // Shuffle the questions randomly
-        Collections.shuffle(questionList);
 
-        txtQuestion = findViewById(R.id.txtQuestion);
-        txtTimer = findViewById(R.id.txtTimer);
-        txtProgress = findViewById(R.id.txtProgress);
-        optionsGroup = findViewById(R.id.optionsGroup);
-        btnNext = findViewById(R.id.btnNext);
-        btnPrev = findViewById(R.id.btnPrev);
-        btnSubmit = findViewById(R.id.btnSubmit);
-        progressBar = findViewById(R.id.progressBar);
-        cardQuestion = findViewById(R.id.cardQuestion);
+        initializeViews();
+        loadQuizData();
+        setupClickListeners();
+        startTimer();
+        showQuestion();
 
-        // Disable buttons until quiz starts
-        btnNext.setEnabled(false);
-        btnPrev.setEnabled(false);
-        btnSubmit.setEnabled(false);
 
-        // Show time selection dialog
-        showTimeSelectionDialog();
-
-        // Button listeners
-        btnNext.setOnClickListener(v -> {
-            animateButton(v);
-            saveSelection();
-            if (currentIndex < questionList.size() - 1) {
-                currentIndex++;
-                animateQuestionChange(this::loadQuestion);
-            }
-        });
-
-        btnPrev.setOnClickListener(v -> {
-            animateButton(v);
-            saveSelection();
-            if (currentIndex > 0) {
-                currentIndex--;
-                animateQuestionChange(this::loadQuestion);
-            }
-        });
-
-        btnSubmit.setOnClickListener(v -> {
-            animateButton(v);
-            saveSelection();
-            finishAndShowResult();
-        });
-
-        // Animate option selection
-        optionsGroup.setOnCheckedChangeListener((group, checkedId) -> animateOptionSelection(checkedId));
     }
 
-    // --- TIME SELECTION DIALOG ---
-    private void showTimeSelectionDialog() {
-        String[] options = {"5 minutes", "10 minutes", "15 minutes"};
-        int[] timesInMillis = {5 * 60 * 1000, 10 * 60 * 1000, 15 * 60 * 1000};
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Select Test Duration")
-                .setSingleChoiceItems(options, 0, (dialog, which) -> selectedDuration = timesInMillis[which])
-                .setPositiveButton("Start", (dialog, which) -> startQuizWithDuration(selectedDuration))
-                .setCancelable(false)
-                .show();
-    }
-
-    private void startQuizWithDuration(long durationMillis) {
-        loadQuestion();
-        startTimer(durationMillis);
-
-        btnNext.setEnabled(true);
-        btnPrev.setEnabled(true);
-        btnSubmit.setEnabled(true);
-    }
-
-    // --- ANIMATIONS ---
-    private void animateQuestionChange(Runnable onAnimationEnd) {
-        cardQuestion.animate()
-                .alpha(0f)
-                .translationX(-50f)
-                .setDuration(200)
-                .withEndAction(() -> {
-                    onAnimationEnd.run();
-                    cardQuestion.setAlpha(0f);
-                    cardQuestion.setTranslationX(50f);
-                    cardQuestion.animate()
-                            .alpha(1f)
-                            .translationX(0f)
-                            .setDuration(200)
-                            .start();
-                }).start();
-    }
 
     private void animateOptionSelection(int checkedId) {
         RadioButton selected = findViewById(checkedId);
@@ -159,116 +81,219 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void animateButton(View btn) {
-        btn.animate()
-                .scaleX(0.95f)
-                .scaleY(0.95f)
-                .setDuration(50)
-                .withEndAction(() -> btn.animate().scaleX(1f).scaleY(1f).setDuration(50).start())
-                .start();
+
+
+
+    private void initializeViews() {
+        subjectName = findViewById(R.id.subjectName);
+        quizSetTitle = findViewById(R.id.quizSetTitle);
+        timerText = findViewById(R.id.timerText);
+        questionProgress = findViewById(R.id.questionProgress);
+        progressPercent = findViewById(R.id.progressPercent);
+        questionText = findViewById(R.id.questionText);
+        progressBar = findViewById(R.id.progressBar);
+        optionsRadioGroup = findViewById(R.id.optionsRadioGroup);
+        previousButton = findViewById(R.id.previousButton);
+        skipButton = findViewById(R.id.skipButton);
+        nextButton = findViewById(R.id.nextButton);
     }
 
-    // --- TIMER WITH SMOOTH PROGRESS ---
-    private void startTimer(long duration) {
-        timeLeftMillis = duration;
-        progressBar.setMax((int) duration / 1000);
+    private void loadQuizData() {
+        Intent intent = getIntent();
+        subjectId = intent.getStringExtra("subjectId");
+        setId = intent.getStringExtra("setId");
 
-        timer = new CountDownTimer(duration, 1000) {
+        // Mock questions data - replace with your actual data
+        questions = new Question[]{
+                new Question("What is the formula for force?",
+                        new String[]{"F = ma", "F = mv", "F = mgh", "F = pV"}, 0),
+                new Question("Which law states that every action has an equal and opposite reaction?",
+                        new String[]{"Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Gravitation"}, 2),
+                new Question("What is the unit of electric current?",
+                        new String[]{"Volt", "Ampere", "Ohm", "Watt"}, 1),
+                new Question("2 + 2 * 2 = ?",
+                        new String[]{"6", "8", "4", "2",}, 1),
+                new Question("Which language is used for Android native development (traditional)?",
+                        new String[]{"Java", "Swift", "Kotlin", "C#"}, 1),
+                new Question("Which gas do plants absorb?",
+                        new String[]{"Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"}, 2),
+                new Question("What is the largest ocean?",
+                        new String[]{"Pacific","Atlantic", "Indian", "Arctic"}, 1)
+        };
+
+        // Set subject info
+        subjectName.setText("Physics");
+        quizSetTitle.setText("Set 3");
+    }
+
+    private void setupClickListeners() {
+        previousButton.setOnClickListener(v -> handlePrevious());
+        skipButton.setOnClickListener(v -> handleSkip());
+        nextButton.setOnClickListener(v -> handleNext());
+
+        optionsRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId != -1) {
+                int selectedOption = Integer.parseInt((String) group.findViewById(checkedId).getTag());
+                answers.put(currentQuestion, selectedOption);
+            }
+        });
+    }
+
+    private void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
+            @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftMillis = millisUntilFinished;
-
-                int seconds = (int) (millisUntilFinished / 1000) % 60;
-                int minutes = (int) (millisUntilFinished / 1000) / 60;
-                txtTimer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
-
-                // Smooth progress bar animation
-                int progress = (int) (millisUntilFinished / 1000);
-                ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress)
-                        .setDuration(500)
-                        .start();
+                updateTimer();
             }
 
+            @Override
             public void onFinish() {
-                finishAndShowResult();
+                timerText.setText("00:00");
+                handleSubmit();
             }
         }.start();
     }
 
-    // --- QUESTION LOADING ---
-    private void loadQuestion() {
-        Question q = questionList.get(currentIndex);
+    private void updateTimer() {
+        int minutes = (int) (timeLeftMillis / 1000) / 60;
+        int seconds = (int) (timeLeftMillis / 1000) % 60;
+        timerText.setText(String.format("%02d:%02d", minutes, seconds));
+    }
 
-        // Shuffle options
-        List<String> opts = Arrays.asList(q.getOption1(), q.getOption2(), q.getOption3(), q.getOption4());
-        Collections.shuffle(opts);
-        txtQuestion.setText(q.getQuestion());
-        ((RadioButton) findViewById(R.id.opt1)).setText(q.getOption1());
-        ((RadioButton) findViewById(R.id.opt2)).setText(q.getOption2());
-        ((RadioButton) findViewById(R.id.opt3)).setText(q.getOption3());
-        ((RadioButton) findViewById(R.id.opt4)).setText(q.getOption4());
-        optionsGroup.clearCheck();
-        txtProgress.setText((currentIndex + 1) + "/" + questionList.size());
+    private void showQuestion() {
+        if (currentQuestion >= questions.length) {
+            handleSubmit();
+            return;
+        }
 
-        Integer sel = selectedAnswers.get(currentIndex);
-        if (sel != null) {
-            int id = R.id.opt1;
-            switch (sel) {
-                case 1: id = R.id.opt1; break;
-                case 2: id = R.id.opt2; break;
-                case 3: id = R.id.opt3; break;
-                case 4: id = R.id.opt4; break;
+        Question question = questions[currentQuestion];
+
+        // Update progress
+        int progress = ((currentQuestion + 1) * 100) / questions.length;
+        questionProgress.setText(String.format("Question %d of %d", currentQuestion + 1, questions.length));
+        progressPercent.setText(progress + "%");
+        progressBar.setProgress(progress);
+
+        // Update question text
+        questionText.setText(question.getText());
+
+        // Update buttons
+        previousButton.setEnabled(currentQuestion > 0);
+        if (currentQuestion == questions.length - 1) {
+            nextButton.setText("Submit");
+            nextButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_flag, 0);
+        } else {
+            nextButton.setText("Next");
+            nextButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_chevron_right, 0);
+        }
+
+        // Populate options
+        populateOptions(question);
+    }
+
+    private void populateOptions(Question question) {
+        optionsRadioGroup.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        for (int i = 0; i < question.getOptions().length; i++) {
+            View optionView = inflater.inflate(R.layout.option_radio_item, optionsRadioGroup, false);
+
+            RadioButton optionRadio = optionView.findViewById(R.id.optionRadio);
+            TextView optionText = optionView.findViewById(R.id.optionText);
+
+            optionRadio.setId(View.generateViewId());
+            optionRadio.setTag(String.valueOf(i));
+            optionText.setText(question.getOptions()[i]);
+
+            // Set checked if previously answered
+            if (answers.containsKey(currentQuestion) && answers.get(currentQuestion) == i) {
+                optionRadio.setChecked(true);
             }
-            optionsGroup.check(id);
+
+            // Set click listener for the whole option view
+            optionView.setOnClickListener(v -> optionRadio.setChecked(true));
+
+            optionsRadioGroup.addView(optionView);
         }
     }
 
-    private void saveSelection() {
-        int selId = optionsGroup.getCheckedRadioButtonId();
-        if (selId == -1) return;
-        int val = 1;
-        if (selId == R.id.opt2) val = 2;
-        else if (selId == R.id.opt3) val = 3;
-        else if (selId == R.id.opt4) val = 4;
-        selectedAnswers.put(currentIndex, val);
+    private void handlePrevious() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            showQuestion();
+        }
     }
 
-    // --- FINISH QUIZ AND SHOW RESULT ---
-    private void finishAndShowResult() {
-        if (timer != null) timer.cancel();
-        correct = 0; wrong = 0;
-        int total = questionList.size();
-        for (int i = 0; i < total; i++) {
-            Integer sel = selectedAnswers.get(i);
-            if (sel == null) continue;
-            String chosen = "";
-            switch (sel) {
-                case 1: chosen = questionList.get(i).getOption1(); break;
-                case 2: chosen = questionList.get(i).getOption2(); break;
-                case 3: chosen = questionList.get(i).getOption3(); break;
-                case 4: chosen = questionList.get(i).getOption4(); break;
-            }
-            if (chosen.equals(questionList.get(i).getCorrect())) correct++;
-            else wrong++;
+    private void handleNext() {
+        if (currentQuestion == questions.length - 1) {
+            handleSubmit();
+        } else {
+            currentQuestion++;
+            showQuestion();
         }
-        int attempted = selectedAnswers.size();
-        int skipped = total - attempted;
-        int score = correct * 4 - wrong;
-        int percentage = Math.round((correct * 100.0f) / total);
+    }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String date = sdf.format(new Date());
-        Result r = new Result(date, total, attempted, skipped, correct, wrong, score);
-        db.insertResult(r);
+    private void handleSkip() {
+        answers.put(currentQuestion, null);
+        handleNext();
+    }
 
-        Intent i = new Intent(QuizActivity.this, ResultActivity.class);
-        i.putExtra("total", total);
-        i.putExtra("attempted", attempted);
-        i.putExtra("skipped", skipped);
-        i.putExtra("correct", correct);
-        i.putExtra("wrong", wrong);
-        i.putExtra("score", score);
-        i.putExtra("percentage", percentage);
-        startActivity(i);
+    private void handleSubmit() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        // Calculate score
+        int correct = 0;
+        int attempted = 0;
+
+        for (int i = 0; i < questions.length; i++) {
+            Integer answer = answers.get(i);
+            if (answer != null) {
+                attempted++;
+                if (answer == questions[i].getCorrectAnswer()) {
+                    correct++;
+                }
+            }
+        }
+
+        int score = (correct * 100) / questions.length;
+
+        // Navigate to result screen
+        Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+        intent.putExtra("subjectId", subjectId);
+        intent.putExtra("setId", setId);
+        intent.putExtra("totalQuestions", questions.length);
+        intent.putExtra("attempted", attempted);
+        intent.putExtra("correct", correct);
+        intent.putExtra("score", score);
+        startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
+    // Data class for questions
+    private static class Question {
+        private String text;
+        private String[] options;
+        private int correctAnswer;
+
+        public Question(String text, String[] options, int correctAnswer) {
+            this.text = text;
+            this.options = options;
+            this.correctAnswer = correctAnswer;
+        }
+
+        public String getText() { return text; }
+        public String[] getOptions() { return options; }
+        public int getCorrectAnswer() { return correctAnswer; }
     }
 }

@@ -21,8 +21,11 @@
         </activity>
         <activity android:name="com.example.smartquiz.ui.QuizActivity"/>
         <activity android:name="com.example.smartquiz.ui.ResultActivity"/>
-        <activity android:name="com.example.smartquiz.ui.HistoryActivity"/>
         <activity android:name="com.example.smartquiz.ui.PerformanceActivity"/>
+        <activity android:name="com.example.smartquiz.ui.SubjectsActivity"/>
+        <activity android:name="com.example.smartquiz.ui.SubjectDetailActivity"/>
+        <activity android:name="com.example.smartquiz.ui.QuizHistoryActivity"/>
+        <activity android:name="com.example.smartquiz.ui.SettingsActivity"/>
     </application>
 
 </manifest>

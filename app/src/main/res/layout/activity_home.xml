@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white"
     android:fitsSystemWindows="false">
 
     <View
-        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="46dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,56 +19,60 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        android:layout_weight="1"
+        android:padding="16dp"
         android:background="@color/background"
+        android:clipToPadding="false"
         android:fitsSystemWindows="false">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:fitsSystemWindows="false">
+            android:orientation="vertical">
+
 
             <!-- Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp">
+                android:gravity="center"
+                android:padding="24dp">
 
                 <TextView
+                    android:id="@+id/titleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Performance"
-                    android:textSize="24sp"
+                    android:text="Smart Quiz"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     android:textColor="@color/primary_text" />
 
                 <TextView
+                    android:id="@+id/subtitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Track your progress and analytics"
-                    android:textSize="14sp"
+                    android:text="Practice. Learn. Excel."
+                    android:textSize="16sp"
                     android:textColor="@color/secondary_text"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="8dp" />
 
             </LinearLayout>
 
-            <!-- Overall Stats Grid -->
+            <!-- Stats Grid -->
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="*"
-                android:padding="4dp">
+                android:padding="8dp">
 
                 <TableRow>
 
-                    <!-- Total Tests -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -77,7 +81,7 @@
                         android:gravity="center"
                         android:background="@drawable/stat_card_background"
                         android:padding="16dp"
-                        android:layout_margin="4dp">
+                        android:layout_margin="8dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -86,7 +90,7 @@
                             app:tint="@color/primary" />
 
                         <TextView
-                            android:id="@+id/tvTotal"
+                            android:id="@+id/testsTakenValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="24"
@@ -98,13 +102,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Tests"
+                            android:text="Tests Taken"
                             android:textSize="12sp"
                             android:textColor="@color/secondary_text" />
 
                     </LinearLayout>
 
-                    <!-- Highest Score -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -113,7 +116,7 @@
                         android:gravity="center"
                         android:background="@drawable/stat_card_background"
                         android:padding="16dp"
-                        android:layout_margin="4dp">
+                        android:layout_margin="8dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -122,7 +125,7 @@
                             app:tint="@color/primary" />
 
                         <TextView
-                            android:id="@+id/highestScoreValue"
+                            android:id="@+id/bestScoreValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="96%"
@@ -134,7 +137,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Highest Score"
+                            android:text="Best Score"
                             android:textSize="12sp"
                             android:textColor="@color/secondary_text" />
 
@@ -144,7 +147,6 @@
 
                 <TableRow>
 
-                    <!-- Average Score -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -153,7 +155,7 @@
                         android:gravity="center"
                         android:background="@drawable/stat_card_background"
                         android:padding="16dp"
-                        android:layout_margin="4dp">
+                        android:layout_margin="8dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -162,7 +164,7 @@
                             app:tint="@color/primary" />
 
                         <TextView
-                            android:id="@+id/tvAvg"
+                            android:id="@+id/avgScoreValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="82%"
@@ -174,13 +176,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Average Score"
+                            android:text="Avg Score"
                             android:textSize="12sp"
                             android:textColor="@color/secondary_text" />
 
                     </LinearLayout>
 
-                    <!-- Tests Passed -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -189,19 +190,19 @@
                         android:gravity="center"
                         android:background="@drawable/stat_card_background"
                         android:padding="16dp"
-                        android:layout_margin="4dp">
+                        android:layout_margin="8dp">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_award"
+                            android:src="@drawable/ic_target"
                             app:tint="@color/primary" />
 
                         <TextView
-                            android:id="@+id/testsPassedValue"
+                            android:id="@+id/bestSubjectValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="21"
+                            android:text="Physics"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/primary_text"
@@ -210,7 +211,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tests Passed"
+                            android:text="Best Subject"
                             android:textSize="12sp"
                             android:textColor="@color/secondary_text" />
 
@@ -220,104 +221,113 @@
 
             </TableLayout>
 
-            <!-- Last 8 Tests Chart Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Quick Actions -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center">
 
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/btnStart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/primary_button_background"
+                    style="@style/PrimaryButton">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_book"
+                        android:layout_centerInParent="true"
+                        app:tint="@color/primary"
+                        android:visibility="gone"/>
+
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Last 8 Test Scores"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_text"
-                        android:layout_marginBottom="16dp" />
+                        android:text="Start New Quiz"
+                        android:textSize="16sp"
+                        android:drawableStart="@drawable/ic_book"
+                        android:drawablePadding="8dp"
+                        />
 
-                    <!-- Bar Chart Placeholder -->
-                    <LinearLayout
-                        android:id="@+id/barChartContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:background="@color/surface_variant"
-                        android:gravity="center">
+                </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bar Chart will be implemented programmatically"
-                            android:textSize="14sp"
-                            android:textColor="@color/secondary_text"
-                            android:gravity="center"
-                            android:padding="16dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Subject Performance Chart Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/btnHistory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/outline_button_background">
 
                     <TextView
+                        android:id="@+id/txthistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subject-wise Performance"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_text"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_centerInParent="true"
+                        android:text="View History"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary"
+                        style="@style/OutlineButton" />
 
-                    <!-- Pie Chart Placeholder -->
-                    <LinearLayout
-                        android:id="@+id/pieChartContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:background="@color/surface_variant"
-                        android:gravity="center">
+                </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pie Chart will be implemented programmatically"
-                            android:textSize="14sp"
-                            android:textColor="@color/secondary_text"
-                            android:gravity="center"
-                            android:padding="16dp" />
 
-                    </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/btnPerformance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/outline_button_background">
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/txtperfomance"
+                        android:layout_width="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_height="wrap_content"
+                        android:text="Performance Summary"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary"
+                        style="@style/OutlineButton" />
 
-            </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/muted_foreground"
+        app:itemTextColor="@color/muted_foreground" />
 
+   <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:paddingBottom="0dp"
+        app:menu="@menu/bottom_navigation_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>

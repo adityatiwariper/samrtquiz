@@ -4,102 +4,323 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@color/blue">
+    android:orientation="vertical"
+    android:fitsSystemWindows="false">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your Result"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#0D47A1"
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp" />
+        android:layout_weight="0"
+        android:background="@color/primary" />
 
-    <!-- Card for main content -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardResult"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        android:layout_marginBottom="@dimen/dimen_24sp"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/background"
+        android:fitsSystemWindows="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="center_horizontal">
+            android:gravity="center"
+            android:fitsSystemWindows="false">
 
-            <!-- Percentage circle (big bold text) -->
+            <!-- Score Circle -->
+            <RelativeLayout
+                android:layout_width="192dp"
+                android:layout_height="192dp"
+                android:layout_marginBottom="32dp">
+
+                <!-- Background Circle -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/score_circle_background" />
+
+                <!-- Progress Circle - Will be animated programmatically -->
+                <ImageView
+                    android:id="@+id/scoreProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/score_circle_progress" />
+
+                <!-- Score Content -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@color/primary"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/scorePercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="85%"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- Title -->
             <TextView
-                android:id="@+id/tvPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="85%"
-                android:textSize="48sp"
+                android:text="Quiz Completed!"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#388E3C"
-                android:layout_marginBottom="16dp"/>
+                android:textColor="@color/primary_text"
+                android:layout_marginBottom="8dp" />
 
-            <!-- Result summary -->
+            <!-- Subject Info -->
             <TextView
-                android:id="@+id/tvSummary"
-                android:layout_width="match_parent"
+                android:id="@+id/subjectInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total: 10\nAttempted: 9\nSkipped: 1\nCorrect: 8\nWrong: 1\nScore: 31"
+                android:text="Physics - Set 3"
                 android:textSize="16sp"
-                android:textColor="#333333"
-                android:gravity="center"
-                android:lineSpacingExtra="6dp" />
+                android:textColor="@color/secondary_text"
+                android:layout_marginBottom="32dp" />
 
-            <!-- Separator line -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="16dp"
-                android:background="#DDDDDD"/>
-
-            <!-- Restart & Home Buttons -->
+            <!-- Stats Grid -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:layout_marginBottom="32dp">
 
-                <Button
-                    android:id="@+id/btnRestart"
-                    android:layout_width="0dp"
+                <!-- Total Questions -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Restart"
-                    android:backgroundTint="#0D47A1"
-                    android:textColor="@android:color/white"/>
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_background">
 
-                <Space
-                    android:layout_width="16dp"
-                    android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp">
 
-                <Button
-                    android:id="@+id/btnHome"
-                    android:layout_width="0dp"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_file_question"
+                            app:tint="@color/info"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Total Questions"
+                            android:textSize="16sp"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/totalQuestions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary_text" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Correct Answers -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Home"
-                    android:backgroundTint="#388E3C"
-                    android:textColor="@android:color/white"/>
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/success"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Correct"
+                            android:textSize="16sp"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/correctAnswers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="85"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/success" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Wrong Answers -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_x_circle"
+                            app:tint="@color/destructive"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Wrong"
+                            android:textSize="16sp"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/wrongAnswers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/destructive" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Skipped Questions -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_file_question"
+                            app:tint="@color/warning"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Skipped"
+                            android:textSize="16sp"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/skippedQuestions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/warning" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
             </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/viewHistoryButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/primary_button_background"
+                    android:text="View History"
+                    android:textColor="@color/on_primary"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/goHomeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/outline_button_background"
+                    android:text="Go Home"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_home" />
+
+            </LinearLayout>
+
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
